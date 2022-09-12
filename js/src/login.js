@@ -3,6 +3,7 @@ function hasToken() {
 }
 
 if (!hasToken()) {
-	$("body").remove();
 	window.location.href='http://mozhengfly.top';
+	var body = document.getElementsByTagName('body')
+	body[0].parentNode.removeChild(body[0])
 }
