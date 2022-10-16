@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Google Plugins</title>
-    <url>/2022/09/12/GooglePlugins/</url>
+    <url>/2022/10/16/GooglePlugins/</url>
     <content><![CDATA[<h2 id="Google-插件"><a href="#Google-插件" class="headerlink" title="Google 插件"></a>Google 插件</h2><ul>
 <li>ElasticSearch Head<ul>
 <li>ElasticSearch连接工具</li>
@@ -94,7 +94,7 @@
   </entry>
   <entry>
     <title>Linux常用命令</title>
-    <url>/2022/09/12/linux/</url>
+    <url>/2022/10/16/linux/</url>
     <content><![CDATA[<h2 id="Linux常用命令"><a href="#Linux常用命令" class="headerlink" title="Linux常用命令"></a>Linux常用命令</h2><h3 id="设置时区"><a href="#设置时区" class="headerlink" title="设置时区"></a>设置时区</h3><ol>
 <li>安装ntp服务软件包：yum install ntp</li>
 <li>将ntp设置为缺省启动：systemctl enable ntpd</li>
@@ -200,7 +200,7 @@
   </entry>
   <entry>
     <title>RPM打包</title>
-    <url>/2022/09/12/rpm/</url>
+    <url>/2022/10/16/rpm/</url>
     <content><![CDATA[<h2 id="RPM打包"><a href="#RPM打包" class="headerlink" title="RPM打包"></a>RPM打包</h2><ol>
 <li>安装制作工具yum -y install rpmdevtools会自动依赖安装rpm-build</li>
 </ol>
@@ -265,6 +265,9 @@
 <p>Document</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 代码</span></span><br><span class="line"><span class="built_in">document</span>.getElementById(<span class="string">'form'</span>).elements</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="comment">// 测试，推送的数据测试，推送的数据测试，推送的数据测试，推送的数据测试，推送的数据\n测试，推送的数据测试，推送的数据测试，推送的数据测试，推送的数据测试，推送的数据\n测试</span></span><br></pre></td></tr></table></figure>
 
+<h3 id="Console发Post请求"><a href="#Console发Post请求" class="headerlink" title="Console发Post请求"></a>Console发Post请求</h3><p>需要先在浏览器中打开网址，然后打开控制台再执行以下的代码。不然会有跨域问题</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">fetch(<span class="keyword">new</span> Request(<span class="string">'http://ip:port/url'</span>, &#123;</span><br><span class="line">    method: <span class="string">'POST'</span>,</span><br><span class="line">    headers: &#123;<span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>, <span class="string">'token'</span>: <span class="string">'code'</span>&#125;,</span><br><span class="line">    body: <span class="string">'&#123;"username":"mozhengfly","password":"123456"&#125;'</span></span><br><span class="line">&#125;)).then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res.status);</span><br><span class="line">    res.text().then(<span class="function"><span class="params">text</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(text)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>杂记</category>
@@ -324,7 +327,7 @@
   </entry>
   <entry>
     <title>Docker</title>
-    <url>/2022/09/12/docker/docker/</url>
+    <url>/2022/10/16/docker/docker/</url>
     <content><![CDATA[<h3 id="Rabbitmq"><a href="#Rabbitmq" class="headerlink" title="Rabbitmq"></a>Rabbitmq</h3><p><code>docker</code>中直接启动一个<code>rabbitmq</code></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d --name rabbitmq -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=123456 -p 15672:15672 -p 5672:5672 rabbitmq:management</span><br></pre></td></tr></table></figure>
 
