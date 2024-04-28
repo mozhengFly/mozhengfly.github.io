@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <script type="text/javascript" src="/js/src/login.js"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="存储过程," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="函数123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Postgresql存储过程">
+<meta property="og:url" content="https://mozhengfly.github.io/2020/08/06/sql/Postgresql/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="函数123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102">
+<meta property="article:published_time" content="2020-08-06T03:14:10.000Z">
+<meta property="article:modified_time" content="2022-09-11T04:08:29.597Z">
+<meta property="article:tag" content="存储过程">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://mozhengfly.github.io/2020/08/06/sql/Postgresql/"/>
+
+
+
+
+
+  <title>Postgresql存储过程 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mozhengfly.github.io/2020/08/06/sql/Postgresql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Postgresql存储过程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-06T11:14:10+08:00">
+                2020-08-06
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2022-09-11T12:08:29+08:00">
+                2022-09-11
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Sql/" itemprop="url" rel="index">
+                    <span itemprop="name">Sql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> search_path <span class="keyword">to</span> db_mozhengfly;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*通过传入一个字符串和一个自增的ID生成有序的UUID*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> gen_uuid(<span class="built_in">VARCHAR</span>, <span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> gen_uuid(<span class="built_in">VARCHAR</span>, <span class="built_in">INT</span>) <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="comment">/*字符串加上数字组成递增的ID*/</span></span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    <span class="keyword">str</span> <span class="keyword">ALIAS</span> <span class="keyword">FOR</span> $<span class="number">1</span>;			<span class="comment">/*字符串*/</span></span><br><span class="line">    num_order ALIAS FOR $2;		<span class="comment">/*数字*/</span></span><br><span class="line">    temp_str VARCHAR;</span><br><span class="line">    res VARCHAR;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    temp_str := <span class="keyword">md5</span>(<span class="keyword">str</span>);</span><br><span class="line">    res := substring(temp_str, 1, 25) || CAST(to_hex(16777216 + num_order) AS VARCHAR);</span><br><span class="line">    RETURN res;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到身份证号码最后一位*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_verify(<span class="built_in">VARCHAR</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_verify(<span class="built_in">VARCHAR</span>) <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="comment">/*得到身份证最后一位*/</span></span><br><span class="line"><span class="keyword">DECLARE</span> </span><br><span class="line">	id_card <span class="keyword">ALIAS</span> <span class="keyword">FOR</span> $<span class="number">1</span>;</span><br><span class="line">	val_code_arr VARCHAR ARRAY := ARRAY['1','0','X','9','8','7','6','5','4','3','2'];</span><br><span class="line">	wi INT ARRAY := ARRAY[7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2];</span><br><span class="line">	totalNum INT := 0;</span><br><span class="line">	mod_value INT;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	<span class="keyword">FOR</span> i <span class="keyword">IN</span> <span class="number">1.</span><span class="number">.17</span> <span class="keyword">loop</span></span><br><span class="line">		totalNum := totalNum + <span class="keyword">CAST</span>( <span class="keyword">substring</span>(id_card, i, <span class="number">1</span>) <span class="keyword">AS</span> <span class="built_in">INT</span>) * wi[i];</span><br><span class="line">	<span class="keyword">END</span> <span class="keyword">loop</span>;	</span><br><span class="line">	mod_value = mod(totalNum, 11);</span><br><span class="line">	RETURN val_code_arr[mod_value + 1];</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*生成身份证号*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> gen_idcard(<span class="built_in">VARCHAR</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> gen_idcard(<span class="built_in">VARCHAR</span>) <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="comment">/*传入区县code生成身份证号*/</span></span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">	id_card <span class="built_in">VARCHAR</span>;</span><br><span class="line">	qx_code ALIAS FOR $1;</span><br><span class="line">	birthday INT;</span><br><span class="line">	b_year INT;</span><br><span class="line">	b_month INT;</span><br><span class="line">	b_day INT;</span><br><span class="line">	ranNum VARCHAR;</span><br><span class="line">	last_str VARCHAR;	</span><br><span class="line">	res VARCHAR;</span><br><span class="line"><span class="keyword">BEGIN</span> </span><br><span class="line">	b_year := <span class="number">1906</span> + random() * <span class="number">100</span>;</span><br><span class="line">	b_month := get_random_number(1, 12);</span><br><span class="line">	CASE b_month WHEN 1,3,5,7,8,10,12 THEN</span><br><span class="line">			b_day := get_random_number(1, 31);</span><br><span class="line">	WHEN 4,6,9,11 THEN</span><br><span class="line">			b_day := get_random_number(1, 30);</span><br><span class="line">	ELSE</span><br><span class="line">			IF mod(b_year, 4) &gt; 0 THEN	</span><br><span class="line">				b_day := get_random_number(1, 29);</span><br><span class="line">			ELSE </span><br><span class="line">				b_day :=get_random_number(1, 28);</span><br><span class="line">			<span class="keyword">END</span> <span class="keyword">IF</span>;</span><br><span class="line">	<span class="keyword">END</span> <span class="keyword">CASE</span>;</span><br><span class="line">	birthday = b_year * 10000 + b_month * 100 + b_day;</span><br><span class="line">	ranNum := substring(CAST(1000 + random() * 999 AS VARCHAR), 2, 3);</span><br><span class="line">	id_card := qx_code || birthday || ranNum;</span><br><span class="line">	last_str := get_verify(id_card);</span><br><span class="line">	res := id_card || last_str;</span><br><span class="line">	RETURN res;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*通过身份证号得到出生年月日*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_birth_by_idcard(<span class="built_in">VARCHAR</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_birth_by_idcard(<span class="built_in">VARCHAR</span>) <span class="keyword">RETURNS</span> <span class="built_in">DATE</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">	temp <span class="built_in">INT</span>;</span><br><span class="line">	year_str VARCHAR DEFAULT substring($1, 7, 4);</span><br><span class="line">	mon_str VARCHAR DEFAULT substring($1, 11, 2);</span><br><span class="line">	day_str VARCHAR DEFAULT substring($1, 13, 2);</span><br><span class="line">	temp_str VARCHAR;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	temp_str := year_str || <span class="string">'-'</span> || mon_str || <span class="string">'-'</span> || day_str;</span><br><span class="line">	RETURN temp_str::DATE;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*通过身份证号得到性别*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_gender_by_idcard(<span class="built_in">VARCHAR</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_gender_by_idcard(<span class="built_in">VARCHAR</span>) <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">	temp <span class="built_in">INT</span>;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	temp := <span class="keyword">CAST</span>(<span class="keyword">substring</span>($<span class="number">1</span>, <span class="number">17</span>, <span class="number">1</span>) <span class="keyword">AS</span> <span class="built_in">INTEGER</span>);</span><br><span class="line">	IF mod(temp, 2) &gt; 0 THEN</span><br><span class="line">		<span class="comment">/*男*/</span></span><br><span class="line">		RETURN '1';</span><br><span class="line">	ELSE</span><br><span class="line">		<span class="comment">/*女*/</span></span><br><span class="line">		RETURN '2';</span><br><span class="line">	<span class="keyword">END</span> <span class="keyword">IF</span>;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到一个随机名字*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_name();</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_name() <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="comment">/*随机生成一个名字*/</span></span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    boy_str <span class="built_in">VARCHAR</span> := <span class="string">'仲基,宗纬,长文,天明,志泽,明杰,弘文,烨伟,文博,天佑,文昊,修杰,苑博,鹏涛,炎彬,烨华,'</span> || </span><br><span class="line">		<span class="string">'煜祺,智宸,昊然,鹤轩,伟泽,哲瀚,雨泽,楷瑞,建辉,致远,俊驰,雨泽,烨磊,黎昕,青枫,旭尧,英杰,浩宇,峻熙,'</span> || </span><br><span class="line">		<span class="string">'嘉懿,煜城,圣杰,俊楠,鸿涛,伟祺,荣轩,君昊,熠彤,鸿煊,博涛,苑杰,黎昕,烨霖,懿轩,昊祯,龙恩,瑾瑜,伯懿,'</span> || </span><br><span class="line">		<span class="string">'伯毅,炫琰,金鑫,柠浩,嘉熙,贝玺,子默,思远,浩轩,语堂,昕宇,家宇,宇豪,宇鞅,宇轩,绍衡,鸿儒,鹏威,君浩,'</span> || </span><br><span class="line">		<span class="string">'昊东,子骞,博文,鸿飞,尚卿,尚博,峻熙,俊轩,冠佑,子丹,子文,伟霆,朝伟,富成,信哲,承哲,振东,杰伦,霸天,'</span> || </span><br><span class="line">		<span class="string">'天虎,宗宪,承豪,承浩,敏浩,珉浩,'</span> ||</span><br><span class="line">        <span class="string">'明,登,维,源,升,应,廷,绍,宗,兴,世,泽,继,祖,远,昌,荣,建,国,恒,光,辉,思,孝,友,在,朝,学,贤,能,俊,杰,'</span> ||</span><br><span class="line">        <span class="string">'挥,先,绪,英,雄,显,厚,立,敬,兴,贤,哲,诗,书,衔,吉,祥,渊,源,经,学,远,同,荣,智,永,芳,声,鸿,名,振,显,'</span> ||</span><br><span class="line">        <span class="string">'道,达,德,宣,扬,承,序,志,培,植,怡,谟,贵,善,良,修,齐,传,泽,厚,敦,睦,裕,基,长,本,固,枝,皆,茂,家,宜,'</span> ||</span><br><span class="line">        <span class="string">'枫,羽,聪,刚,斌,彬,彪,健,勇,鹏,强,植,睿,贝,渊,非,今,所,能,逆,料,也,子,孙,酌,而,易,之,又,吾,之,所'</span>;</span><br><span class="line">    girl_str VARCHAR := '梦夏,思涵,启维,思恩,诗涵,易涵,晶锦,莫愁,静琪,诗婧,诗茵,思颖,政颖,语嫣,娅维,世恩,' ||</span><br><span class="line">		'慧乔,紫晴,慧娴,雨晴,佳怡,心怡,静妍,梦雨,梦妍,梦冰,梦雪,淑仪,淑怡,亦菲,静姝,宝英,宝珍,' ||</span><br><span class="line">        '雪妍,维贞,雪莉,智英,静雅,茹芸,欣妍,雅雯,梦洁,梦瑶,碧晨,桂英,佳琳,家琳,晨曦,丞琳,雨欣,思雨,思露,凡华,' || </span><br><span class="line">		'千华,秀妍,雪琴,雪芹,凡,佳,嘉,琼,勤,珍,贞,莉,桂,' ||</span><br><span class="line">        '娣,叶,璧,娅,琦,晶,妍,茜,秋,珊,莎,锦,黛,青,倩,婷,姣,婉,娴,瑾,颖,露,瑶,怡,婵,雁,蓓,纨,仪,荷,丹,蓉,眉,' ||</span><br><span class="line">        '保,东,文,辉,力,明,永,健,世,广,志,义,兴,良,海,山,仁,波,宁,贵,福,生,龙,元,全,国,胜,学,祥,才,发,武,新,利,' ||</span><br><span class="line">        '清,飞,彬,富,顺,信,子,杰,涛,昌,成,康,星,光,天,达,安,岩,中,茂,进,林,有,坚,和,彪,博,诚,先,敬,震,振,壮,会,' ||</span><br><span class="line">        '思,群,豪,心,邦,承,乐,绍,功,松,善,厚,庆,磊,民,友,裕,河,哲,江,超,浩,亮,政,谦,亨,奇,固,之,轮,翰,朗,伯,宏,' ||</span><br><span class="line">        '静,颖,琪,巧,燕,梅,琦,维,霞,莉,凤,姝,琳,瑶,洁,璐,涵,蓉,姬,婵,雨,鸢,冰,梦,雪,娜,时,泰,盛,雄,琛,钧,冠,策';</span><br><span class="line">    boy_arr VARCHAR ARRAY := regexp_split_to_array(boy_str, E',');</span><br><span class="line">    girl_arr VARCHAR ARRAY := regexp_split_to_array(girl_str, E',');</span><br><span class="line">    ran_int INT := get_random_number(1, 100);</span><br><span class="line">    res VARCHAR;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">IF</span> ran_int &lt; <span class="number">50</span> <span class="keyword">THEN</span></span><br><span class="line">        res := get_random_surname() || get_string_from_arr(girl_arr);</span><br><span class="line">    ELSE</span><br><span class="line">        res := get_random_surname() || get_string_from_arr(boy_arr);</span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">IF</span>;</span><br><span class="line">    RETURN res;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到一个随机姓氏*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_surname();</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_surname() <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="comment">/*随机生成一个姓氏*/</span></span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    surname_str <span class="built_in">VARCHAR</span> := <span class="string">'赵,钱,孙,李,周,吴,郑,王,冯,陈,褚,卫,蒋,沈,韩,杨,朱,秦,尤,许,何,吕,施,'</span> || </span><br><span class="line">		<span class="string">'张,孔,曹,严,华,金,魏,陶,姜,戚,谢,邹,喻,柏,水,窦,章,云,苏,潘,葛,奚,范,彭,郎,鲁,韦,昌,马,苗,'</span> || </span><br><span class="line">		<span class="string">'凤,花,方,俞,任,袁,柳,酆,鲍,史,唐,费,廉,岑,薛,雷,贺,倪,汤,滕,殷,罗,毕,郝,邬,安,常,乐,于,时,'</span> || </span><br><span class="line">		<span class="string">'傅,皮,卞,齐,康,伍,余,元,卜,顾,孟,平,黄,和,穆,萧,尹,姚,邵,湛,汪,祁,毛,禹,狄,米,贝,明,臧,计,'</span> || </span><br><span class="line">		<span class="string">'伏,成,戴,谈,宋,茅,庞,熊,纪,舒,屈,项,祝,董,梁,杜,阮,蓝,闵,席,季,麻,强,贾,路,娄,危,江,童,颜,'</span> || </span><br><span class="line">		<span class="string">'郭,梅,盛,林,刁,锺,徐,邱,骆,高,夏,蔡,田,樊,胡,凌,霍,虞,万,支,柯,昝,管,卢,莫,经,房,裘,缪,干,'</span> || </span><br><span class="line">		<span class="string">'解,应,宗,丁,宣,贲,邓,郁,单,杭,洪,包,诸,左,石,崔,吉,钮,龚,程,嵇,邢,滑,裴,陆,荣,翁,荀,羊,於,'</span> || </span><br><span class="line">		<span class="string">'惠,甄,麴,家,封,芮,羿,储,靳,汲,邴,糜,松,井,段,富,巫,乌,焦,巴,弓,牧,隗,山,谷,车,侯,宓,蓬,全,'</span> || </span><br><span class="line">		<span class="string">'郗,班,仰,秋,仲,伊,宫,宁,仇,栾,暴,甘,钭,历,戎,祖,武,符,刘,景,詹,束,龙,叶,幸,司,韶,郜,黎,蓟,'</span> || </span><br><span class="line">		<span class="string">'溥,印,宿,白,怀,蒲,邰,从,鄂,索,咸,籍,赖,卓,蔺,屠,蒙,池,乔,阳,郁,胥,能,苍,双,闻,莘,党,翟,谭,'</span> || </span><br><span class="line">		<span class="string">'贡,劳,逄,姬,申,扶,堵,冉,宰,郦,雍,却,璩,桑,桂,濮,牛,寿,通,边,扈,燕,冀,僪,浦,尚,农,温,别,庄,'</span> || </span><br><span class="line">		<span class="string">'晏,柴,瞿,阎,充,慕,连,茹,习,宦,艾,鱼,容,向,古,易,慎,戈,廖,庾,终,暨,居,衡,步,都,耿,满,弘,匡,'</span> || </span><br><span class="line">		<span class="string">'国,文,寇,广,禄,阙,东,欧,殳,沃,利,蔚,越,夔,隆,师,巩,厍,聂,晁,勾,敖,融,冷,訾,辛,阚,那,简,饶,'</span> || </span><br><span class="line">		<span class="string">'空,曾,毋,沙,乜,养,鞠,须,丰,巢,关,蒯,相,查,后,荆,红,游,竺,权,逮,盍,益,桓,公,万俟,司马,上官,'</span> || </span><br><span class="line">		<span class="string">'欧阳,夏侯,诸葛,闻人,东方,赫连,皇甫,尉迟,百里,东郭,南门,呼延,归海'</span>;</span><br><span class="line">    surname_arr VARCHAR ARRAY := regexp_split_to_array(surname_str, E',');</span><br><span class="line">    res VARCHAR;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    res := get_string_from_arr(surname_arr);</span><br><span class="line">    RETURN res;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到随机电话号码*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_lxdh();</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_lxdh() <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">	tel_str <span class="built_in">VARCHAR</span> <span class="keyword">DEFAULT</span> <span class="string">'134,135,136,137,138,139,150,151,152,157,158,159,130,131,132,155,156,133,153,180,181,182,183'</span>;</span><br><span class="line">	tel_arr VARCHAR ARRAY := regexp_split_to_array(tel_str, E',');</span><br><span class="line">	temp VARCHAR;</span><br><span class="line">	res VARCHAR;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	temp := get_random_num_string(<span class="number">8</span>);</span><br><span class="line">	res := get_string_from_arr(tel_arr) || temp;</span><br><span class="line">	RETURN res;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*生成随机数字*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_number(<span class="built_in">INT</span>, <span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_number(<span class="built_in">INT</span>, <span class="built_in">INT</span>) <span class="keyword">RETURNS</span> <span class="built_in">INT</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="comment">/*传入开始数和结束数，得到中间的一个随机数*/</span></span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    start_int <span class="keyword">ALIAS</span> <span class="keyword">FOR</span> $<span class="number">1</span> ; end_int ALIAS FOR $2 ;</span><br><span class="line"><span class="comment">/* 第一个数表示开始数，第二个数表示结束数*/</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">RETURN</span> trunc(</span><br><span class="line">        random() * (end_int - start_int + <span class="number">1</span>) + start_int</span><br><span class="line">    ) ;</span><br><span class="line"><span class="keyword">END</span> ;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*从字符串数组随机获得一个字符*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_string_from_arr(<span class="built_in">VARCHAR</span> <span class="built_in">ARRAY</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_string_from_arr(<span class="built_in">VARCHAR</span> <span class="built_in">ARRAY</span>) <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="comment">/*从字符串数组随机获得一个字符,传入一个字符串数组*/</span></span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    res <span class="built_in">VARCHAR</span>;</span><br><span class="line">    arr ALIAS FOR $1;</span><br><span class="line">    len INT := array_length(arr, 1);</span><br><span class="line">    ran_int INT := get_random_number(1, len);</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    res := arr[ran_int];</span><br><span class="line">    RETURN res;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到一个指定长度的随机字符串*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_string(<span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_string(<span class="built_in">INT</span>) <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    <span class="keyword">str</span> <span class="built_in">VARCHAR</span> <span class="keyword">DEFAULT</span> <span class="string">'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'</span> ;</span><br><span class="line">	res VARCHAR ;</span><br><span class="line"><span class="comment">/* 传入参数表示想获得多长的随机字符串 */</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    res = get_random_string(<span class="keyword">str</span>, $<span class="number">1</span>);</span><br><span class="line">	RETURN res ;</span><br><span class="line"><span class="keyword">END</span> ;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到一个指定长度的随机纯数字字符串*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_num_string(<span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_num_string(<span class="built_in">INT</span>) <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    <span class="keyword">str</span> <span class="built_in">VARCHAR</span> <span class="keyword">DEFAULT</span> <span class="string">'0123456789'</span> ;</span><br><span class="line">	res VARCHAR ;</span><br><span class="line"><span class="comment">/* 传入参数表示想获得多长的随机字符串 */</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    res = get_random_string(<span class="keyword">str</span>, $<span class="number">1</span>);</span><br><span class="line">	RETURN res ;</span><br><span class="line"><span class="keyword">END</span> ;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*传入一个字符串，和想要得到的字符串长度，得到一个指定长度的随机字符串*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_string(<span class="built_in">VARCHAR</span>,<span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_string(<span class="built_in">VARCHAR</span>,<span class="built_in">INT</span>) <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    <span class="keyword">str</span> <span class="keyword">ALIAS</span> <span class="keyword">FOR</span> $<span class="number">1</span>;</span><br><span class="line">	res VARCHAR ;</span><br><span class="line"><span class="comment">/* 传入参数表示想获得多长的随机字符串 */</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">SELECT</span></span><br><span class="line">        array_to_string(</span><br><span class="line">            <span class="built_in">ARRAY</span> (</span><br><span class="line">                <span class="keyword">SELECT</span></span><br><span class="line">                    <span class="keyword">SUBSTRING</span> (</span><br><span class="line">                        <span class="keyword">str</span></span><br><span class="line">                        <span class="keyword">FROM</span></span><br><span class="line">                            (</span><br><span class="line">                                <span class="keyword">CEIL</span> (random() * <span class="keyword">CHAR_LENGTH</span>(<span class="keyword">str</span>))</span><br><span class="line">                            ) :: <span class="built_in">INT</span> <span class="keyword">FOR</span> <span class="number">1</span></span><br><span class="line">                    )</span><br><span class="line">                <span class="keyword">FROM</span></span><br><span class="line">                    generate_series (<span class="number">1</span>, $<span class="number">2</span>)</span><br><span class="line">            ),</span><br><span class="line">            <span class="string">''</span></span><br><span class="line">        ) <span class="keyword">INTO</span> res ;</span><br><span class="line">	RETURN res ;</span><br><span class="line"><span class="keyword">END</span> ;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到一个随机日期*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_date(start_date <span class="built_in">date</span>, end_date <span class="built_in">date</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_date(start_date <span class="built_in">date</span>, end_date <span class="built_in">date</span>) <span class="keyword">RETURNS</span> <span class="built_in">DATE</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="comment">/*传入开始日期和结束日期，得到其区间内的一个随机日期*/</span></span><br><span class="line"><span class="keyword">DECLARE</span>  </span><br><span class="line">    interval_days <span class="built_in">integer</span>;  </span><br><span class="line">    random_days integer;  </span><br><span class="line">    random_date DATE;  </span><br><span class="line"><span class="keyword">BEGIN</span>  </span><br><span class="line">    interval_days := end_date - start_date;  </span><br><span class="line">    random_days := get_random_number(0, interval_days); </span><br><span class="line">    random_date := start_date + random_days;  </span><br><span class="line">    RETURN random_date;  </span><br><span class="line"><span class="keyword">END</span>;  </span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到一个随机timestamp*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_datetime(start_date <span class="built_in">date</span>, end_date <span class="built_in">date</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_datetime(start_date <span class="built_in">date</span>, end_date <span class="built_in">date</span>) <span class="keyword">RETURNS</span> <span class="built_in">TIMESTAMP</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="comment">/*传入开始日期和结束日期，得到其区间内的一个随机timestamp*/</span></span><br><span class="line"><span class="keyword">DECLARE</span>    </span><br><span class="line">	interval_days <span class="built_in">integer</span>; </span><br><span class="line">	random_seconds integer;  </span><br><span class="line">	random_dates integer;</span><br><span class="line">	random_date date;  </span><br><span class="line">	random_time time; </span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	interval_days := end_date - start_date; </span><br><span class="line">	random_dates:= trunc(random() * interval_days);</span><br><span class="line">	random_date := start_date + random_dates; </span><br><span class="line">	random_seconds:= trunc(random() * 3600 * 24); </span><br><span class="line">	random_time:=' 00:00:00'::time + (random_seconds || ' second')::INTERVAL; </span><br><span class="line">	RETURN random_date + random_time; </span><br><span class="line"> <span class="keyword">END</span>;  </span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到随机是和否，传入的参数表示多少概率得到的结果为是；比如传入参数为80，则百分之80的结果为是*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_sf(<span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_sf(<span class="built_in">INT</span>) <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">    c_result <span class="built_in">VARCHAR</span>(<span class="number">2</span>);</span><br><span class="line">    n_random INT;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    n_random := trunc(random() * <span class="number">100</span>);</span><br><span class="line">    IF n_random &lt; $1 THEN</span><br><span class="line">        c_result := '1';</span><br><span class="line">    ELSE</span><br><span class="line">        c_result := '2';</span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">IF</span>;</span><br><span class="line">    RETURN c_result;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到居民家庭类型,也可用于得到随机的1,2,3,*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_three();</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_three() <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span> </span><br><span class="line">	jtlx_arr <span class="built_in">VARCHAR</span> <span class="built_in">ARRAY</span> := <span class="built_in">ARRAY</span>[<span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'3'</span>];</span><br><span class="line">	ranNum INT := get_random_number(1, 3);</span><br><span class="line">	res VARCHAR;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	res := arr[ranNum];</span><br><span class="line">	RETURN res;</span><br><span class="line"><span class="keyword">END</span> ; </span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到随机的1,2,3,4*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_four();</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_four() <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span> </span><br><span class="line">	arr <span class="built_in">VARCHAR</span> <span class="built_in">ARRAY</span> := <span class="built_in">ARRAY</span>[<span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'3'</span>,<span class="string">'4'</span>];</span><br><span class="line">	ranNum INT := get_random_number(1, 4);</span><br><span class="line">	res VARCHAR;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	res := arr[ranNum];</span><br><span class="line">	RETURN res;</span><br><span class="line"><span class="keyword">END</span> ;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*得到随机的1,2,3,4,5*/</span></span><br><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> get_random_five();</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> get_random_five() <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$</span><br><span class="line"> <span class="keyword">DECLARE</span> </span><br><span class="line">	arr <span class="built_in">VARCHAR</span> <span class="built_in">ARRAY</span> := <span class="built_in">ARRAY</span>[<span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'3'</span>,<span class="string">'4'</span>,<span class="string">'5'</span>];</span><br><span class="line">	ranNum INT := get_random_number(1, 5);</span><br><span class="line">	res VARCHAR;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	res := arr[ranNum];</span><br><span class="line">	RETURN res;</span><br><span class="line"><span class="keyword">END</span> ; </span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*释放死锁*/</span><span class="comment">/* </span></span><br><span class="line"><span class="comment">DROP FUNCTION IF EXISTS cancel_lock(VARCHAR);</span></span><br><span class="line"><span class="comment">CREATE FUNCTION cancel_lock(VARCHAR) RETURNS void AS $$</span></span><br><span class="line"><span class="comment">DECLARE </span></span><br><span class="line"><span class="comment">	tableName ALIAS FOR $1; </span></span><br><span class="line"><span class="comment">	c_ref refcursor;</span></span><br><span class="line"><span class="comment">	res record;</span></span><br><span class="line"><span class="comment">BEGIN</span></span><br><span class="line"><span class="comment">	OPEN c_ref FOR SELECT aa.pid FROM pg_stat_activity aa,</span></span><br><span class="line"><span class="comment">			(</span></span><br><span class="line"><span class="comment">				SELECT</span></span><br><span class="line"><span class="comment">					A .locktype,</span></span><br><span class="line"><span class="comment">					A . DATABASE,</span></span><br><span class="line"><span class="comment">					A .pid,</span></span><br><span class="line"><span class="comment">					A . MODE,</span></span><br><span class="line"><span class="comment">					A .relation,</span></span><br><span class="line"><span class="comment">					b.relname</span></span><br><span class="line"><span class="comment">				FROM</span></span><br><span class="line"><span class="comment">					pg_locks A</span></span><br><span class="line"><span class="comment">				JOIN pg_class b ON A .relation = b.oid</span></span><br><span class="line"><span class="comment">				WHERE</span></span><br><span class="line"><span class="comment">					UPPER (b.relname) = tableName</span></span><br><span class="line"><span class="comment">			) bb</span></span><br><span class="line"><span class="comment">			WHERE</span></span><br><span class="line"><span class="comment">				aa.pid = bb.pid</span></span><br><span class="line"><span class="comment">			AND aa.waiting = 't'</span></span><br><span class="line"><span class="comment">	FETCH c_ref INTO res;</span></span><br><span class="line"><span class="comment">	while FOUND LOOP</span></span><br><span class="line"><span class="comment">		select pg_cancel_backend(res.pid);</span></span><br><span class="line"><span class="comment">		FETCH c_ref INTO res;</span></span><br><span class="line"><span class="comment">	END LOOP;</span></span><br><span class="line"><span class="comment">END ; </span></span><br><span class="line"><span class="comment">$$</span></span><br><span class="line"><span class="comment">LANGUAGE plpgsql; */</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/*更新主键cbh*/</span></span><br><span class="line"><span class="comment">/* DROP FUNCTION IF EXISTS update_cbh();</span></span><br><span class="line"><span class="comment">CREATE FUNCTION update_cbh() RETURNS INT AS $$</span></span><br><span class="line"><span class="comment">DECLARE </span></span><br><span class="line"><span class="comment">	icount INT DEFAULT 0;</span></span><br><span class="line"><span class="comment">	random_str VARCHAR DEFAULT get_random_string(32);</span></span><br><span class="line"><span class="comment">	c_ref refcursor;</span></span><br><span class="line"><span class="comment">	res record;</span></span><br><span class="line"><span class="comment">BEGIN</span></span><br><span class="line"><span class="comment">	OPEN c_ref FOR SELECT * FROM db_mozhengfly.t_user;</span></span><br><span class="line"><span class="comment">	FETCH c_ref INTO res;</span></span><br><span class="line"><span class="comment">	while FOUND LOOP</span></span><br><span class="line"><span class="comment">		icount := icount + 1;</span></span><br><span class="line"><span class="comment">		update db_mozhengfly.t_user set c_bh = gen_uuid(random_str, icount) where c_bh = res.c_bh;</span></span><br><span class="line"><span class="comment">		FETCH c_ref INTO res;</span></span><br><span class="line"><span class="comment">	END LOOP;</span></span><br><span class="line"><span class="comment">	return icount;</span></span><br><span class="line"><span class="comment">END ; </span></span><br><span class="line"><span class="comment">$$</span></span><br><span class="line"><span class="comment">LANGUAGE plpgsql; */</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">FUNCTION</span> <span class="keyword">IF</span> <span class="keyword">EXISTS</span> gen_user_data(<span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> gen_user_data(<span class="built_in">INT</span>) <span class="keyword">RETURNS</span> <span class="built_in">INTEGER</span> <span class="keyword">AS</span> $$</span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">	icount <span class="keyword">ALIAS</span> <span class="keyword">FOR</span> $<span class="number">1</span>;</span><br><span class="line">	random_str VARCHAR DEFAULT get_random_string(32);</span><br><span class="line">	start_date DATE DEFAULT get_random_date('2017-05-01','2017-06-01');</span><br><span class="line">	end_date DATE DEFAULT get_random_date('2017-06-01','2017-07-01');</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	<span class="keyword">FOR</span> i <span class="keyword">IN</span> <span class="number">1.</span>.icount <span class="keyword">LOOP</span></span><br><span class="line">		<span class="keyword">INSERT</span> <span class="keyword">INTO</span> db_mozhengfly.t_user <span class="keyword">VALUES</span> (gen_uuid(random_str, i), <span class="string">'这是第'</span> || i || <span class="string">'们'</span>, get_random_number(<span class="number">4</span>, <span class="number">10</span>), get_random_number(<span class="number">4</span>, <span class="number">10</span>),</span><br><span class="line">				start_date, end_date, get_random_sf(<span class="number">50</span>), get_random_string(<span class="number">16</span>));</span><br><span class="line">	<span class="keyword">END</span> <span class="keyword">LOOP</span>;</span><br><span class="line">	RETURN icount;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">$$</span><br><span class="line">LANGUAGE plpgsql;</span><br></pre></td></tr></table></figure>
+
+<h2 id="处理数据的存储过程"><a href="#处理数据的存储过程" class="headerlink" title="处理数据的存储过程"></a>处理数据的存储过程</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">FUNCTION</span> process_zcfz_bb_history_data () <span class="keyword">RETURNS</span> <span class="built_in">VARCHAR</span> <span class="keyword">AS</span> $$ </span><br><span class="line"><span class="keyword">DECLARE</span></span><br><span class="line">	res <span class="built_in">VARCHAR</span> := <span class="string">''</span>;</span><br><span class="line">	single_res VARCHAR := '';</span><br><span class="line">	c_ref refcursor;</span><br><span class="line">	v_record record;</span><br><span class="line">	exp_arr VARCHAR ARRAY;</span><br><span class="line">	data_val NUMERIC;</span><br><span class="line">	</span><br><span class="line">	v_val_record record;</span><br><span class="line">	</span><br><span class="line">	var_a record;</span><br><span class="line">	var_b record;</span><br><span class="line">	</span><br><span class="line">	executePrSql VARCHAR;</span><br><span class="line">	</span><br><span class="line">	i_status INT := 0;</span><br><span class="line">	update_sql VARCHAR;</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">	<span class="keyword">OPEN</span> c_ref <span class="keyword">FOR</span> (<span class="keyword">select</span> bh, <span class="keyword">data</span>, <span class="keyword">exp</span> <span class="keyword">from</span> table_user);</span><br><span class="line">	FETCH c_ref INTO v_record;</span><br><span class="line">	<span class="comment">-- 循环处理数据</span></span><br><span class="line">	WHILE FOUND LOOP</span><br><span class="line">		data_val := 0;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">-- 解析exp</span></span><br><span class="line">		exp_arr := regexp_split_to_array(v_record.exp, '\+');</span><br><span class="line">		<span class="comment">-- 数组循环</span></span><br><span class="line">		FOR var IN array_lower(exp_arr, 1)..array_upper(exp_arr, 1) LOOP</span><br><span class="line"><span class="comment">-- 			RAISE NOTICE 'exp :  % [%]', v_record.c_bh, exp_arr[var];</span></span><br><span class="line">			IF position('-' in exp_arr[var]) &gt; 0 THEN</span><br><span class="line">				exp_arr := regexp_split_to_array(v_record.exp, '-');</span><br><span class="line">				executePrSql := '<span class="keyword">select</span> * <span class="keyword">from</span> t_test<span class="string">';</span></span><br><span class="line"><span class="string">				EXECUTE executePrSql INTO var_a;</span></span><br><span class="line"><span class="string">				executePrSql := '</span><span class="keyword">select</span> * <span class="keyword">from</span> t_test<span class="string">';</span></span><br><span class="line"><span class="string">				EXECUTE executePrSql INTO var_b;</span></span><br><span class="line"><span class="string">				</span></span><br><span class="line"><span class="string">				data_val := var_a.data_val - var_b.data_val;</span></span><br><span class="line"><span class="string">			ELSE</span></span><br><span class="line"><span class="string">				executePrSql := '</span><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">test</span><span class="string">';</span></span><br><span class="line"><span class="string">-- 			RAISE NOTICE '</span><span class="keyword">SQL</span> : %<span class="string">', executePrSql;</span></span><br><span class="line"><span class="string">			</span></span><br><span class="line"><span class="string">				EXECUTE executePrSql INTO v_val_record;</span></span><br><span class="line"><span class="string">				</span></span><br><span class="line"><span class="string">				data_val := data_val + v_val_record.data_val;</span></span><br><span class="line"><span class="string">			END IF;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">		END LOOP;</span></span><br><span class="line"><span class="string">		</span></span><br><span class="line"><span class="string">		i_status := 0;</span></span><br><span class="line"><span class="string">		IF data_val != v_record.data_val THEN</span></span><br><span class="line"><span class="string">				RAISE NOTICE '</span>提示 [data_val][%] 结果不等:  计算结果 [%] 数据库值 [%]<span class="string">', v_record.c_bbzd, qc_val, v_record.n_qcye;</span></span><br><span class="line"><span class="string">				i_status := 1;</span></span><br><span class="line"><span class="string">		END IF;</span></span><br><span class="line"><span class="string">		IF i_status &gt; 0 THEN</span></span><br><span class="line"><span class="string">				update_sql := '</span><span class="keyword">update</span> <span class="keyword">test</span> <span class="keyword">set</span> data_val = <span class="string">' || data_val || '</span> <span class="keyword">where</span> c_bh = <span class="string">''' || v_record.c_bh || '''';</span></span><br><span class="line"><span class="string">				RAISE NOTICE '</span>执行更新: [%]<span class="string">', update_sql;</span></span><br><span class="line"><span class="string">				EXECUTE update_sql;</span></span><br><span class="line"><span class="string">		END IF;</span></span><br><span class="line"><span class="string">		</span></span><br><span class="line"><span class="string">		FETCH c_ref INTO v_record;</span></span><br><span class="line"><span class="string">	END LOOP;</span></span><br><span class="line"><span class="string">	</span></span><br><span class="line"><span class="string">	RETURN res;</span></span><br><span class="line"><span class="string">END;</span></span><br><span class="line"><span class="string">$$ LANGUAGE plpgsql;</span></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag"># 存储过程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/02/ffmpeg/" rel="next" title="Ffmpeg命令">
+                <i class="fa fa-chevron-left"></i> Ffmpeg命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/06/sql/Mysql/" rel="prev" title="Mysql存储过程">
+                Mysql存储过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/archives/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数"><span class="nav-number">1.</span> <span class="nav-text">函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储过程"><span class="nav-number">2.</span> <span class="nav-text">存储过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#处理数据的存储过程"><span class="nav-number">3.</span> <span class="nav-text">处理数据的存储过程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+  <!-- <script type="text/javascript" src="/js/src/clicklove.js"></script> -->
+  <!-- 代码块复制功能 -->
+  <script type="text/javascript" src="/js/src/clipboard.min.js"></script>
+  <script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+</html>
