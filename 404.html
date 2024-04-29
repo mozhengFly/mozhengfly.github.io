@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>404</title>
+    <script>
+        window.addEventListener('message', function (e) {
+            var data = JSON.parse(e.data);
+            window.localStorage.setItem(data.key, data.value);
+        });
+    </script>
+</head>
+<body>
+<noscript>
+    <strong>We're sorry but personal-web-front doesn't work properly without JavaScript enabled. Please enable it to
+        continue.</strong>
+</noscript>
+<div id="app">
+    <div>
+        <button id="checkButton">Check Website</button>
+        <div id="results"></div>
+    </div>
+</div>
+<script>
+    function checkWebsiteAccessibility(url, statusElement) {
+        statusElement.innerText = `Checking [ ${url} ]...`;
+        fetch(url).then(response => {
+            console.log(url, response)
+            if (response.ok) {
+                statusElement.innerText = `Check completed for [ ${url} ], Result is [Website is accessible]`;
+            } else {
+                statusElement.innerText = `Check completed for [ ${url} ], Result is [Website is not accessible]`;
+            }
+        }).catch(error => {
+            statusElement.innerText = `Check completed for [ ${url} ], Result is [Error: ${error}]`;
+        });
+    }
+
+    document.getElementById("checkButton").addEventListener("click", function () {
+        const websites = [
+            'https://feiniaoyun01.life',
+            'https://feiniaoyun08.life',
+            'https://feiniaoyun09.life',
+            'https://feiniaoyun02.life',
+            'https://feiniaoyun07.life',
+            'https://feiniaoyun01.top',
+            'https://feiniaoyun01.xyz',
+            'https://feiniaoyun.top',
+            'https://feiniaoyun.org',
+            'https://feiniaoyun.net',
+            'https://feiniaoyun.life',
+            'https://feiniaoyun.xyz',
+        ];
+        const resultsDiv = document.getElementById("results");
+        websites.forEach(website => {
+            const statusElement = document.createElement("p");
+            resultsDiv.appendChild(statusElement);
+            checkWebsiteAccessibility(website, statusElement);
+        });
+    });
+</script>
+</body>
+</html>

@@ -69,7 +69,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="存储过程," />
 
 
 
@@ -80,10 +80,15 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="https://mozhengfly.github.io/archives/2022/09/index.html">
+<meta name="description" content="函数得到随机数123456----得到随机数drop function if exists f_getRandomNumber;create function f_getRandomNumber(start_num int, end_num int) RETURNS INTbegin 	RETURN (FLOOR(RAND() * (end_num - start_num + 1)) + star">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql存储过程">
+<meta property="og:url" content="https://mozhengfly.github.io/2020/08/06/Sql/Mysql/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="函数得到随机数123456----得到随机数drop function if exists f_getRandomNumber;create function f_getRandomNumber(start_num int, end_num int) RETURNS INTbegin 	RETURN (FLOOR(RAND() * (end_num - start_num + 1)) + star">
+<meta property="article:published_time" content="2020-08-06T03:14:10.000Z">
+<meta property="article:modified_time" content="2024-04-29T06:14:16.470Z">
+<meta property="article:tag" content="存储过程">
 <meta name="twitter:card" content="summary">
 
 
@@ -114,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="https://mozhengfly.github.io/archives/2022/09/"/>
+  <link rel="canonical" href="https://mozhengfly.github.io/2020/08/06/Sql/Mysql/"/>
 
 
 
 
 
-  <title>归档 | Hexo</title>
+  <title>Mysql存储过程 | Hexo</title>
   
 
 
@@ -139,7 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -267,111 +272,191 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
-
-      <span class="archive-page-counter">
-        
-        
-        
-          
-        
-        嗯..! 目前共计 15 篇日志。 继续努力。
-      </span>
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2022">2022</h1>
-          </div>
-        
-        
-
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://mozhengfly.github.io/2020/08/06/Sql/Mysql/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2022/09/11/linux/" itemprop="url">
-              
-                <span itemprop="name">Linux常用命令</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Mysql存储过程</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2022-09-11T12:08:29+08:00"
-              content="2022-09-11" >
-          09-11
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-06T11:14:10+08:00">
+                2020-08-06
+              </time>
+            
 
-    </header>
-  </article>
+            
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2024-04-29T14:14:16+08:00">
+                2024-04-29
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Sql/" itemprop="url" rel="index">
+                    <span itemprop="name">Sql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="得到随机数"><a href="#得到随机数" class="headerlink" title="得到随机数"></a>得到随机数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">----得到随机数</span><br><span class="line">drop function if exists f_getRandomNumber;</span><br><span class="line">create function f_getRandomNumber(start_num int, end_num int) RETURNS INT</span><br><span class="line">begin </span><br><span class="line">	RETURN (FLOOR(RAND() * (end_num - start_num + 1)) + start_num);</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h3 id="得到随机日期"><a href="#得到随机日期" class="headerlink" title="得到随机日期"></a>得到随机日期</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">----得到随机日期</span><br><span class="line">drop function if exists f_getRandomDate;</span><br><span class="line">create function f_getRandomDate(startDate date, endDate date) RETURNS date</span><br><span class="line">begin </span><br><span class="line">	set @intervalDays &#x3D; endDate - startDate;</span><br><span class="line">	set @randomDays &#x3D; f_getRandomNumber(1, @intervalDays);</span><br><span class="line">	RETURN startDate + @randomDays;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h2 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h2><p>示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">drop procedure if exists sp_gen_user;</span><br><span class="line">create procedure sp_gen_user(in num int)</span><br><span class="line">comment &#39;insert user data&#39;</span><br><span class="line">begin</span><br><span class="line">	declare iCount int;</span><br><span class="line">	declare i int;</span><br><span class="line">	set iCount &#x3D; num;</span><br><span class="line">	set i &#x3D; 0;</span><br><span class="line">	TRUNCATE db_scu.t_user;</span><br><span class="line">	while i &lt; iCount do</span><br><span class="line">		insert into db_scu.t_user(c_bh, c_login_id, c_password, c_name, c_nick_name, c_phone, c_email) </span><br><span class="line">			values (i, CONCAT(&#39;login_id_&#39;, i), &#39;123&#39;, &#39;name&#39;, &#39;nickName&#39;, &#39;phone&#39;, &#39;email&#39;);</span><br><span class="line">		set i &#x3D; i + 1;</span><br><span class="line">	end while;</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
 
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2022/09/11/docker/docker/" itemprop="url">
-              
-                <span itemprop="name">Docker</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2022-09-11T12:08:29+08:00"
-              content="2022-09-11" >
-          09-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B/" rel="tag"># 存储过程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/06/Sql/Postgresql/" rel="next" title="Postgresql存储过程">
+                <i class="fa fa-chevron-left"></i> Postgresql存储过程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/06/redis/" rel="prev" title="Redis">
+                Redis <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -379,6 +464,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -399,8 +488,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -460,6 +558,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#函数"><span class="nav-number">1.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#得到随机数"><span class="nav-number">1.1.</span> <span class="nav-text">得到随机数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#得到随机日期"><span class="nav-number">1.2.</span> <span class="nav-text">得到随机日期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储过程"><span class="nav-number">2.</span> <span class="nav-text">存储过程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -600,6 +714,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
