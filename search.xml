@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Google Plugins</title>
-    <url>/2024/04/29/GooglePlugins/</url>
+    <url>/2024/04/30/GooglePlugins/</url>
     <content><![CDATA[<h2 id="Google-插件"><a href="#Google-插件" class="headerlink" title="Google 插件"></a>Google 插件</h2><ul>
 <li>ElasticSearch Head<ul>
 <li>ElasticSearch连接工具</li>
@@ -94,7 +94,7 @@
   </entry>
   <entry>
     <title>Linux常用命令</title>
-    <url>/2024/04/29/linux/</url>
+    <url>/2024/04/30/linux/</url>
     <content><![CDATA[<h2 id="Linux常用命令"><a href="#Linux常用命令" class="headerlink" title="Linux常用命令"></a>Linux常用命令</h2><h3 id="设置时区"><a href="#设置时区" class="headerlink" title="设置时区"></a>设置时区</h3><ol>
 <li>安装ntp服务软件包：yum install ntp</li>
 <li>将ntp设置为缺省启动：systemctl enable ntpd</li>
@@ -167,6 +167,14 @@
 
 <h3 id="查看各文件夹大小"><a href="#查看各文件夹大小" class="headerlink" title="查看各文件夹大小"></a>查看各文件夹大小</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">du -h /opt | grep G | sort -nr</span><br></pre></td></tr></table></figure>
 
+<h3 id="ll-命令"><a href="#ll-命令" class="headerlink" title="ll 命令"></a>ll 命令</h3><h4 id="按时间排序"><a href="#按时间排序" class="headerlink" title="按时间排序"></a>按时间排序</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ll -ht</span><br></pre></td></tr></table></figure>
+
+<h4 id="按大小排序"><a href="#按大小排序" class="headerlink" title="按大小排序"></a>按大小排序</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ll -hS</span><br></pre></td></tr></table></figure>
+
+
+
+
+
 ]]></content>
       <categories>
         <category>Linux</category>
@@ -200,7 +208,7 @@
   </entry>
   <entry>
     <title>RPM打包</title>
-    <url>/2024/04/29/rpm/</url>
+    <url>/2024/04/30/rpm/</url>
     <content><![CDATA[<h2 id="RPM打包"><a href="#RPM打包" class="headerlink" title="RPM打包"></a>RPM打包</h2><ol>
 <li>安装制作工具yum -y install rpmdevtools会自动依赖安装rpm-build</li>
 </ol>
@@ -327,7 +335,7 @@
   </entry>
   <entry>
     <title>Docker</title>
-    <url>/2024/04/29/docker/docker/</url>
+    <url>/2024/04/30/docker/docker/</url>
     <content><![CDATA[<h3 id="Rabbitmq"><a href="#Rabbitmq" class="headerlink" title="Rabbitmq"></a>Rabbitmq</h3><p><code>docker</code>中直接启动一个<code>rabbitmq</code></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d --name rabbitmq -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=123456 -p 15672:15672 -p 5672:5672 rabbitmq:management</span><br></pre></td></tr></table></figure>
 
@@ -358,6 +366,18 @@
       <tags>
         <tag>docker</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Java-8</title>
+    <url>/2022/12/02/jvm/Java-8/</url>
+    <content><![CDATA[<h2 id="流相关操作"><a href="#流相关操作" class="headerlink" title="流相关操作"></a>流相关操作</h2><h3 id="reduce-把数组转成树"><a href="#reduce-把数组转成树" class="headerlink" title="reduce 把数组转成树"></a>reduce 把数组转成树</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 找到所有的根节点</span></span><br><span class="line">         List&lt;TreeNode&gt; rootNode = allNodes.stream()</span><br><span class="line">                 .filter(TreeNode::isRootNode)</span><br><span class="line">                 .sorted(Comparator.comparing(TreeNode::getOrder))</span><br><span class="line">                 .collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line">         <span class="comment">// 为每个根节点设置children</span></span><br><span class="line">         rootNode.forEach(ele -&gt; &#123;</span><br><span class="line">             List&lt;TreeNode&gt; chilren = allNodes.stream().reduce(<span class="keyword">new</span> ArrayList&lt;&gt;(), (list, current) -&gt; &#123;</span><br><span class="line">                 List&lt;TreeNode&gt; currentChildren = allNodes.stream()</span><br><span class="line">                         .filter(e -&gt; StringUtils.equals(e.getParentId(), current.getId()))</span><br><span class="line">                         .map(TreeNode::cloneNode)</span><br><span class="line">                         .sorted(Comparator.comparing(TreeNode::getOrder))</span><br><span class="line">                         .collect(Collectors.toList());</span><br><span class="line">                 current.setChildren(currentChildren);</span><br><span class="line">                 <span class="keyword">if</span> (StringUtils.equals(ele.getId(), current.getParentId())) &#123;</span><br><span class="line">                     list.add(current.cloneNode());</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">return</span> list;</span><br><span class="line">             &#125;, (list, list2) -&gt; list);</span><br><span class="line">             ele.setChildren(chilren);</span><br><span class="line">         &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="分组的时候把value值映射"><a href="#分组的时候把value值映射" class="headerlink" title="分组的时候把value值映射"></a>分组的时候把value值映射</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Map&lt;String, String&gt; map = list.stream().collect(Collectors</span><br><span class="line">                .groupingBy(Bean::getCode, Collectors.mapping(Bean::getName, Collectors.joining(<span class="string">","</span>))));</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
   </entry>
   <entry>
     <title>JVM类加载器</title>

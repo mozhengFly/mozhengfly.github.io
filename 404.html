@@ -14,31 +14,37 @@
 </head>
 <body>
 <noscript>
-    <strong>We're sorry but personal-web-front doesn't work properly without JavaScript enabled. Please enable it to
-        continue.</strong>
+    <strong>We're sorry but page doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
 </noscript>
 <div id="app">
     <div>
         <button id="checkButton">Check Website</button>
+        <label for="token"></label><input type="text" id="token" style="width: 250px;"/>
         <div id="results"></div>
     </div>
 </div>
 <script>
-    function checkWebsiteAccessibility(url, statusElement) {
+    function checkWebsiteAccessibility(url, resultsDiv) {
+        const statusElement = window.document.createElement("div");
+        statusElement.style.cssText="color:red; height:26px; opacity:0.7;";
         statusElement.innerText = `Checking [ ${url} ]...`;
-        fetch(url).then(response => {
-            console.log(url, response)
-            if (response.ok) {
-                statusElement.innerText = `Check completed for [ ${url} ], Result is [Website is accessible]`;
-            } else {
-                statusElement.innerText = `Check completed for [ ${url} ], Result is [Website is not accessible]`;
-            }
-        }).catch(error => {
-            statusElement.innerText = `Check completed for [ ${url} ], Result is [Error: ${error}]`;
-        });
+
+        const token = window.document.getElementById('token').value;
+        const accessUrl = url + "/api/v1/client/subscribe?token=" + token;
+        var line = window.document.createElement('div');
+        resultsDiv.appendChild(line);
+        line.appendChild(statusElement);
+        var iframe = window.document.createElement('iframe');
+        iframe.src = accessUrl;
+        iframe.style.cssText = "height:38px; width:100%; max-width:400px;";
+        iframe.setAttribute('scrolling', 'no');
+        iframe.onload = function (value) {
+            statusElement.innerText = `Check completed for [ ${url} ]`;
+        }
+        line.appendChild(iframe);
     }
 
-    document.getElementById("checkButton").addEventListener("click", function () {
+    window.document.getElementById("checkButton").addEventListener("click", function () {
         const websites = [
             'https://feiniaoyun01.life',
             'https://feiniaoyun08.life',
@@ -53,13 +59,30 @@
             'https://feiniaoyun.life',
             'https://feiniaoyun.xyz',
         ];
-        const resultsDiv = document.getElementById("results");
-        websites.forEach(website => {
-            const statusElement = document.createElement("p");
+        const resultsDiv = window.document.getElementById("results");
+        while (resultsDiv.firstChild) {
+            resultsDiv.removeChild(div.firstChild);
+        }
+        const token = window.document.getElementById('token').value;
+        if (!token) {
+            const statusElement = window.document.createElement("div");
+            statusElement.style.cssText="color:red; height:26px; opacity:0.7;";
+            statusElement.innerText = 'Please input the token value !';
             resultsDiv.appendChild(statusElement);
-            checkWebsiteAccessibility(website, statusElement);
+            return;
+        }
+        websites.forEach(website => {
+            checkWebsiteAccessibility(website, resultsDiv);
         });
     });
+
+    window.document.getElementById('token').addEventListener("change", function (event) {
+        window.localStorage.setItem('proxy_token', event.target.value);
+    })
+
+    window.onload = function () {
+        window.document.getElementById('token').value = window.localStorage.getItem('proxy_token');
+    }
 </script>
 </body>
 </html>
