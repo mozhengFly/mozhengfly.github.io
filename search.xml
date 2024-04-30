@@ -167,9 +167,12 @@
 
 <h3 id="查看各文件夹大小"><a href="#查看各文件夹大小" class="headerlink" title="查看各文件夹大小"></a>查看各文件夹大小</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">du -h /opt | grep G | sort -nr</span><br></pre></td></tr></table></figure>
 
-<h3 id="ll-命令"><a href="#ll-命令" class="headerlink" title="ll 命令"></a>ll 命令</h3><h4 id="按时间排序"><a href="#按时间排序" class="headerlink" title="按时间排序"></a>按时间排序</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ll -ht</span><br></pre></td></tr></table></figure>
+<h3 id="ll-命令"><a href="#ll-命令" class="headerlink" title="ll 命令"></a>ll 命令</h3><h4 id="按时间排序"><a href="#按时间排序" class="headerlink" title="按时间排序"></a>按时间排序</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 正序</span></span><br><span class="line">ls -lrt</span><br><span class="line"><span class="comment"># 倒序</span></span><br><span class="line">ls -lht</span><br></pre></td></tr></table></figure>
 
-<h4 id="按大小排序"><a href="#按大小排序" class="headerlink" title="按大小排序"></a>按大小排序</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ll -hS</span><br></pre></td></tr></table></figure>
+<h4 id="按大小排序"><a href="#按大小排序" class="headerlink" title="按大小排序"></a>按大小排序</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 正序</span></span><br><span class="line">ls -lrS</span><br><span class="line"><span class="comment"># 倒序</span></span><br><span class="line">ls -lhS</span><br></pre></td></tr></table></figure>
+
+<h3 id="查找文件内容"><a href="#查找文件内容" class="headerlink" title="查找文件内容"></a>查找文件内容</h3><p>查找文件夹下所有文件包含<code>search_text</code>的内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">grep -r <span class="string">"search_text"</span> /usr/<span class="built_in">local</span>/nginx</span><br></pre></td></tr></table></figure>
 
 
 
