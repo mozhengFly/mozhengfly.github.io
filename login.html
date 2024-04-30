@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<script src="js/src/login.js"></script>
+<body>
+<label for="data"></label><textarea id="data" style="width: 100%; display: block; height: 60px;"></textarea>
+<label for="visitorId"></label><input type="text" id="visitorId" disabled style="width: 300px" />
+<button id="login">登录</button>
+</body>
+<script type="application/javascript">
+    window.document.getElementById("login").addEventListener("click", function () {
+        const accessToken = window.document.getElementById("data").value
+        processResult(verifyLoginSignature(accessToken), accessToken)
+    })
+    window.onload = function () {
+        fingerprintInformation().then(res => {
+            window.document.getElementById('visitorId').value = res.visitorId
+            window.localStorage.setItem('visitorId', res.visitorId)
+        })
+    }
+</script>
+</html>
