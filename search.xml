@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Google Plugins</title>
-    <url>/2024/04/30/GooglePlugins/</url>
+    <url>/2024/05/06/GooglePlugins/</url>
     <content><![CDATA[<h2 id="Google-插件"><a href="#Google-插件" class="headerlink" title="Google 插件"></a>Google 插件</h2><ul>
 <li>ElasticSearch Head<ul>
 <li>ElasticSearch连接工具</li>
@@ -94,7 +94,7 @@
   </entry>
   <entry>
     <title>Linux常用命令</title>
-    <url>/2024/04/30/linux/</url>
+    <url>/2024/05/06/linux/</url>
     <content><![CDATA[<h2 id="Linux常用命令"><a href="#Linux常用命令" class="headerlink" title="Linux常用命令"></a>Linux常用命令</h2><h3 id="设置时区"><a href="#设置时区" class="headerlink" title="设置时区"></a>设置时区</h3><ol>
 <li>安装ntp服务软件包：yum install ntp</li>
 <li>将ntp设置为缺省启动：systemctl enable ntpd</li>
@@ -212,33 +212,6 @@
       </categories>
   </entry>
   <entry>
-    <title>RPM打包</title>
-    <url>/2024/04/30/rpm/</url>
-    <content><![CDATA[<h2 id="RPM打包"><a href="#RPM打包" class="headerlink" title="RPM打包"></a>RPM打包</h2><ol>
-<li>安装制作工具yum -y install rpmdevtools会自动依赖安装rpm-build</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install rpmdevtools</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>执行rpmdev-setuptree生成开发目录会在~目录生成rpmbuild文件目录</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rpmdev-setuptree</span><br></pre></td></tr></table></figure>
-
-<p>znzs-script.spec</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Name: znzs-script</span><br><span class="line">Version: 1.0.0</span><br><span class="line">Release:        1%&#123;?dist&#125;</span><br><span class="line">Summary: znzs scripts</span><br><span class="line"></span><br><span class="line">Group:Development&#x2F;Tools</span><br><span class="line">License:GPL</span><br><span class="line">URL: http:&#x2F;&#x2F;mozhengfly.top</span><br><span class="line">Source0:%&#123;name&#125;-%&#123;version&#125;.tar.gz</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%description</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%prep</span><br><span class="line">%setup -q</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%build</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%install</span><br><span class="line">mkdir -p $RPM_BUILD_ROOT&#x2F;opt&#x2F;%&#123;name&#125;</span><br><span class="line">cp -r $RPM_BUILD_DIR&#x2F;%&#123;name&#125;-%&#123;version&#125;&#x2F;* $RPM_BUILD_ROOT&#x2F;opt&#x2F;%&#123;name&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%clean</span><br><span class="line">rm -rf $RRPM_BUILD_ROOT</span><br><span class="line"></span><br><span class="line">%files</span><br><span class="line">%doc</span><br><span class="line">&#x2F;opt&#x2F;%&#123;name&#125;&#x2F;*</span><br><span class="line"></span><br><span class="line">%postun</span><br><span class="line">rm -rf &#x2F;opt&#x2F;%&#123;name&#125;</span><br><span class="line"></span><br><span class="line">%changelog</span><br></pre></td></tr></table></figure>
-
-<p>打包脚本</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">NAME=znzs-script</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$1</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">  VERSION=<span class="variable">$1</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  VERSION=1.0.0</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="built_in">echo</span> build <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span></span><br><span class="line"><span class="built_in">cd</span> ~/rpmbuild/SOURCES</span><br><span class="line">cp -r <span class="variable">$&#123;NAME&#125;</span> <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span></span><br><span class="line">rm -f <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span>.tar.gz</span><br><span class="line">tar zcvf <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span>.tar.gz <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span></span><br><span class="line">rm -rf <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span></span><br><span class="line"><span class="built_in">cd</span> ../SPECS</span><br><span class="line">sed -i <span class="string">"s/Version:.*/Version: <span class="variable">$&#123;VERSION&#125;</span>/"</span> <span class="variable">$&#123;NAME&#125;</span>.spec</span><br><span class="line">rpmbuild -ba <span class="variable">$&#123;NAME&#125;</span>.spec</span><br><span class="line">cp -r ../RPMS/x86_64/<span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span>-*.rpm ../</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>RPM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>地址大全</title>
     <url>/2020/08/18/%E5%9C%B0%E5%9D%80%E5%A4%A7%E5%85%A8/</url>
     <content><![CDATA[<h3 id="npm镜像地址"><a href="#npm镜像地址" class="headerlink" title="npm镜像地址"></a>npm镜像地址</h3><h4 id="node"><a href="#node" class="headerlink" title="node"></a>node</h4><p>版本浏览</p>
@@ -264,6 +237,33 @@
       </categories>
       <tags>
         <tag>地址大全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RPM打包</title>
+    <url>/2024/05/06/rpm/</url>
+    <content><![CDATA[<h2 id="RPM打包"><a href="#RPM打包" class="headerlink" title="RPM打包"></a>RPM打包</h2><ol>
+<li>安装制作工具yum -y install rpmdevtools会自动依赖安装rpm-build</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install rpmdevtools</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>执行rpmdev-setuptree生成开发目录会在~目录生成rpmbuild文件目录</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rpmdev-setuptree</span><br></pre></td></tr></table></figure>
+
+<p>znzs-script.spec</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Name: znzs-script</span><br><span class="line">Version: 1.0.0</span><br><span class="line">Release:        1%&#123;?dist&#125;</span><br><span class="line">Summary: znzs scripts</span><br><span class="line"></span><br><span class="line">Group:Development&#x2F;Tools</span><br><span class="line">License:GPL</span><br><span class="line">URL: http:&#x2F;&#x2F;mozhengfly.top</span><br><span class="line">Source0:%&#123;name&#125;-%&#123;version&#125;.tar.gz</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%description</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%prep</span><br><span class="line">%setup -q</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%build</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%install</span><br><span class="line">mkdir -p $RPM_BUILD_ROOT&#x2F;opt&#x2F;%&#123;name&#125;</span><br><span class="line">cp -r $RPM_BUILD_DIR&#x2F;%&#123;name&#125;-%&#123;version&#125;&#x2F;* $RPM_BUILD_ROOT&#x2F;opt&#x2F;%&#123;name&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">%clean</span><br><span class="line">rm -rf $RRPM_BUILD_ROOT</span><br><span class="line"></span><br><span class="line">%files</span><br><span class="line">%doc</span><br><span class="line">&#x2F;opt&#x2F;%&#123;name&#125;&#x2F;*</span><br><span class="line"></span><br><span class="line">%postun</span><br><span class="line">rm -rf &#x2F;opt&#x2F;%&#123;name&#125;</span><br><span class="line"></span><br><span class="line">%changelog</span><br></pre></td></tr></table></figure>
+
+<p>打包脚本</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">NAME=znzs-script</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$1</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">  VERSION=<span class="variable">$1</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  VERSION=1.0.0</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="built_in">echo</span> build <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span></span><br><span class="line"><span class="built_in">cd</span> ~/rpmbuild/SOURCES</span><br><span class="line">cp -r <span class="variable">$&#123;NAME&#125;</span> <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span></span><br><span class="line">rm -f <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span>.tar.gz</span><br><span class="line">tar zcvf <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span>.tar.gz <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span></span><br><span class="line">rm -rf <span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span></span><br><span class="line"><span class="built_in">cd</span> ../SPECS</span><br><span class="line">sed -i <span class="string">"s/Version:.*/Version: <span class="variable">$&#123;VERSION&#125;</span>/"</span> <span class="variable">$&#123;NAME&#125;</span>.spec</span><br><span class="line">rpmbuild -ba <span class="variable">$&#123;NAME&#125;</span>.spec</span><br><span class="line">cp -r ../RPMS/x86_64/<span class="variable">$&#123;NAME&#125;</span>-<span class="variable">$&#123;VERSION&#125;</span>-*.rpm ../</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>RPM</tag>
       </tags>
   </entry>
   <entry>
@@ -340,7 +340,7 @@
   </entry>
   <entry>
     <title>Docker</title>
-    <url>/2024/04/30/docker/docker/</url>
+    <url>/2024/05/06/docker/docker/</url>
     <content><![CDATA[<h3 id="Rabbitmq"><a href="#Rabbitmq" class="headerlink" title="Rabbitmq"></a>Rabbitmq</h3><p><code>docker</code>中直接启动一个<code>rabbitmq</code></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d --name rabbitmq -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=123456 -p 15672:15672 -p 5672:5672 rabbitmq:management</span><br></pre></td></tr></table></figure>
 
