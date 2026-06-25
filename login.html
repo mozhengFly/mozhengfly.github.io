@@ -1,25 +1,554 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 · 安全验证</title>
+    <!-- 引入登录逻辑 (保持不变) -->
+    <script src="js/src/login.js"></script>
+    <style>
+        /* 全局重置 & 字体 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(145deg, #f6f9fc 0%, #e9f0f8 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            margin: 0;
+        }
+
+        /* 卡片容器 — 干净、柔和 */
+        .login-card {
+            max-width: 520px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 2.8rem 2.5rem 2.8rem 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08), 0 8px 24px rgba(0, 20, 40, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .login-card:hover {
+            box-shadow: 0 30px 70px rgba(0, 20, 40, 0.10);
+        }
+
+        /* 标题区域 */
+        .card-header {
+            margin-bottom: 2.2rem;
+            text-align: left;
+        }
+
+        .card-header h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: #0b1e33;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-header h1 small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #4b6a8b;
+            margin-left: 0.5rem;
+            letter-spacing: 0.2px;
+        }
+
+        .card-header .sub {
+            font-size: 0.95rem;
+            color: #4e6a8a;
+            margin-top: 0.3rem;
+            opacity: 0.8;
+            border-left: 3px solid #3b7bff;
+            padding-left: 0.8rem;
+        }
+
+        /* 表单字段 */
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+            margin-bottom: 2.2rem;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .field label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #2f4a6b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .field label i {
+            font-style: normal;
+            font-weight: 400;
+            color: #6b8bb0;
+            text-transform: none;
+        }
+
+        /* textarea 与 input 统一风格 */
+        .field textarea,
+        .field input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            font-size: 0.95rem;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #ffffff;
+            border: 1.5px solid #dde6f2;
+            border-radius: 24px;
+            transition: border 0.2s, box-shadow 0.2s, background 0.2s;
+            outline: none;
+            color: #0b1e33;
+            line-height: 1.4;
+            resize: vertical;
+        }
+
+        .field textarea {
+            min-height: 72px;
+            height: 72px;
+            max-height: 180px;
+        }
+
+        .field input[disabled] {
+            background: #f0f5fc;
+            color: #1c3350;
+            cursor: not-allowed;
+            opacity: 0.8;
+            border-color: #d0ddee;
+        }
+
+        .field textarea:focus,
+        .field input:focus:not([disabled]) {
+            border-color: #3b7bff;
+            box-shadow: 0 0 0 4px rgba(59, 123, 255, 0.12);
+            background: #ffffff;
+        }
+
+        .field textarea::placeholder,
+        .field input::placeholder {
+            color: #99b0cc;
+            font-weight: 350;
+        }
+
+        /* 访客ID 单独装饰 */
+        .visitor-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: #f2f8ff;
+            border-radius: 40px;
+            padding: 0.2rem 0.2rem 0.2rem 1.2rem;
+            border: 1px solid #dde6f2;
+        }
+
+        .visitor-wrapper input {
+            border: none !important;
+            background: transparent !important;
+            padding: 0.7rem 0.2rem 0.7rem 0;
+            font-weight: 450;
+            font-size: 0.9rem;
+            flex: 1;
+            min-width: 100px;
+            box-shadow: none !important;
+        }
+
+        .visitor-wrapper input:focus {
+            box-shadow: none !important;
+        }
+
+        .visitor-badge {
+            background: #1a2b4c;
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+
+        /* 按钮 */
+        .btn-login {
+            width: 100%;
+            padding: 1rem 1.8rem;
+            background: #0b1e33;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            font-weight: 550;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(11, 30, 51, 0.10);
+            margin-top: 0.4rem;
+        }
+
+        .btn-login:hover {
+            background: #132b47;
+            transform: scale(1.01);
+            box-shadow: 0 12px 28px rgba(11, 30, 51, 0.16);
+        }
+
+        .btn-login:active {
+            background: #081b2e;
+            transform: scale(0.98);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(0.4);
+        }
+
+        /* 反馈 / 结果区域 (轻量) */
+        .result-box {
+            margin-top: 1.8rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 30px;
+            background: #f0f6fe;
+            border: 1px solid #dce6f2;
+            font-size: 0.9rem;
+            color: #1d3657;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            min-height: 3.6rem;
+            word-break: break-word;
+            transition: 0.2s;
+        }
+
+        .result-box .icon {
+            font-size: 1.4rem;
+            line-height: 1;
+        }
+
+        .result-box .message {
+            flex: 1;
+        }
+
+        .result-box.success {
+            background: #e2f0e6;
+            border-color: #b3d5c2;
+            color: #0c3b2a;
+        }
+
+        .result-box.error {
+            background: #fee9e9;
+            border-color: #f5c2c2;
+            color: #7f2d2d;
+        }
+
+        .result-box.info {
+            background: #e7effa;
+            border-color: #c5d8ef;
+            color: #1d3a60;
+        }
+
+        /* 脚注辅助 */
+        .footer-note {
+            margin-top: 1.8rem;
+            font-size: 0.75rem;
+            color: #6c88aa;
+            text-align: center;
+            letter-spacing: 0.2px;
+            border-top: 1px solid rgba(0,0,0,0.03);
+            padding-top: 1.2rem;
+        }
+
+        .footer-note span {
+            background: #eef3fa;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 1.8rem 1.2rem;
+                border-radius: 32px;
+            }
+            .card-header h1 {
+                font-size: 1.6rem;
+                flex-wrap: wrap;
+            }
+            .visitor-wrapper {
+                flex-wrap: wrap;
+                background: transparent;
+                padding: 0;
+                border: none;
+                gap: 0.4rem;
+            }
+            .visitor-wrapper input {
+                background: #f2f8ff !important;
+                border: 1.5px solid #dde6f2 !important;
+                border-radius: 24px !important;
+                padding: 0.7rem 1.2rem !important;
+            }
+            .visitor-badge {
+                align-self: flex-start;
+            }
+        }
+
+        /* 小点缀：光标 */
+        .field textarea {
+            caret-color: #3b7bff;
+        }
+    </style>
 </head>
-<script src="js/src/login.js"></script>
 <body>
-<label for="data"></label><textarea id="data" style="width: 100%; display: block; height: 60px;"></textarea>
-<label for="visitorId"></label><input type="text" id="visitorId" disabled style="width: 300px" />
-<button id="login">登录</button>
-</body>
+
+<div class="login-card">
+    <!-- 头部 -->
+    <div class="card-header">
+        <h1>
+            🔐 登录
+            <small>签名验证</small>
+        </h1>
+        <div class="sub">使用签名令牌进行安全登录</div>
+    </div>
+
+    <!-- 表单 -->
+    <div class="field-group">
+        <!-- 数据 (AccessToken) -->
+        <div class="field">
+            <label for="data">
+                📝 访问令牌 <i>— 签名数据</i>
+            </label>
+            <textarea id="data" placeholder="请粘贴从签名工具生成的 accessToken …"></textarea>
+        </div>
+
+        <!-- 访客ID (自动填充) -->
+        <div class="field">
+            <label for="visitorId">
+                🆔 访客标识 <i>— 自动识别</i>
+            </label>
+            <div class="visitor-wrapper">
+                <input type="text" id="visitorId" disabled placeholder="正在获取指纹…" />
+                <span class="visitor-badge">✓ 已锁定</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录按钮 -->
+    <button class="btn-login" id="login">
+        <span>⟳</span> 验证并登录
+    </button>
+
+    <!-- 结果反馈区 -->
+    <div id="resultDisplay" class="result-box info">
+        <span class="icon">ℹ️</span>
+        <span class="message" id="resultMessage">等待验证…</span>
+    </div>
+
+    <div class="footer-note">
+        <span>🔒 签名由 login.js 验证</span>
+    </div>
+</div>
+
+<!-- 逻辑脚本 (完全保留原有功能，只增强 UI 反馈) -->
 <script type="application/javascript">
-    window.document.getElementById("login").addEventListener("click", function () {
-        const accessToken = window.document.getElementById("data").value
-        processResult(verifyLoginSignature(accessToken), accessToken)
-    })
-    window.onload = function () {
-        fingerprintInformation().then(res => {
-            window.document.getElementById('visitorId').value = res.visitorId
-            window.localStorage.setItem('visitorId', res.visitorId)
-        })
-    }
+    (function() {
+        // 获取 DOM 元素
+        const dataTextarea = document.getElementById('data');
+        const visitorInput = document.getElementById('visitorId');
+        const loginBtn = document.getElementById('login');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const resultMessage = document.getElementById('resultMessage');
+
+        // 辅助函数：更新结果框样式 + 信息
+        function setResult(type, message) {
+            // 清除所有状态类
+            resultDisplay.classList.remove('success', 'error', 'info');
+            // 添加对应类
+            if (type === 'success') {
+                resultDisplay.classList.add('success');
+                resultDisplay.querySelector('.icon').textContent = '✅';
+            } else if (type === 'error') {
+                resultDisplay.classList.add('error');
+                resultDisplay.querySelector('.icon').textContent = '❌';
+            } else {
+                resultDisplay.classList.add('info');
+                resultDisplay.querySelector('.icon').textContent = 'ℹ️';
+            }
+            resultMessage.textContent = message;
+        }
+
+        // 默认信息
+        setResult('info', '请输入 accessToken 并点击登录');
+
+        // 登录点击事件 (保留原始逻辑，增加 UI 反馈)
+        loginBtn.addEventListener('click', function() {
+            const accessToken = dataTextarea.value.trim();
+
+            // 简单校验：token 不能为空
+            if (!accessToken) {
+                setResult('error', '❌ 访问令牌不能为空，请粘贴签名数据');
+                // 抖动效果（可选）
+                dataTextarea.style.borderColor = '#e55a5a';
+                setTimeout(() => dataTextarea.style.borderColor = '', 600);
+                return;
+            }
+
+            // 检查 visitorId 是否存在 (虽然 disabled 但可能未加载)
+            const visitorId = visitorInput.value.trim();
+            if (!visitorId) {
+                setResult('error', '❌ 访客ID尚未获取，请刷新页面或检查 fingerprintInformation');
+                return;
+            }
+
+            // 调用原有业务逻辑: processResult(verifyLoginSignature(accessToken), accessToken)
+            // 但需捕获异常，避免崩溃
+            try {
+                // 验证签名 (来自 login.js)
+                const verificationResult = verifyLoginSignature(accessToken);
+                // 处理结果 (原有函数)
+                processResult(verificationResult, accessToken);
+            } catch (err) {
+                console.error('登录验证异常:', err);
+                setResult('error', `⚠️ 验证异常: ${err.message || '未知错误'}`);
+                // 如果 processResult 内部有错误，我们用 try 兜底
+            }
+        });
+
+        // 保留原有 processResult 的增强 (但不要覆盖全局，而是包装)
+        // 但是我们不能修改全局 processResult，因为 login.js 定义了它。
+        // 我们可以覆写或代理：保存原函数，然后包装
+        if (typeof processResult === 'function') {
+            const originalProcessResult = processResult;
+            // 重新定义 processResult 以增加 UI 反馈 (但保持原有逻辑)
+            window.processResult = function(result, accessToken) {
+                // 首先调用原逻辑 (可能会 alert 或者做其他事情)
+                try {
+                    originalProcessResult(result, accessToken);
+                } catch (e) {
+                    console.warn('原始 processResult 抛出异常:', e);
+                    // 但我们也需要展示反馈
+                }
+
+                // 根据 result 展示不同的 UI 反馈
+                // 注意: 原逻辑可能在内部做 alert, 这里额外提供友好反馈
+                // 但由于我们不知道 result 的结构，使用类型判断
+                if (result && typeof result === 'object') {
+                    if (result.success === true || result.status === 'ok' || result.verified === true) {
+                        setResult('success', `✅ 登录验证通过！欢迎 ${result.user || '用户'}`);
+                    } else if (result.error || result.message) {
+                        const errMsg = result.error || result.message || '验证失败';
+                        setResult('error', `❌ ${errMsg}`);
+                    } else {
+                        setResult('info', `📋 验证结果: ${JSON.stringify(result).slice(0, 80)}…`);
+                    }
+                } else if (result === true || result === 'true' || result === 'OK') {
+                    setResult('success', '✅ 验证成功，登录完成');
+                } else if (result === false || result === 'false' || result === 'FAIL') {
+                    setResult('error', '❌ 签名验证失败，请检查令牌');
+                } else if (result && typeof result === 'string') {
+                    // 如果返回字符串，尝试包含 success/error 关键词
+                    const lower = result.toLowerCase();
+                    if (lower.includes('success') || lower.includes('ok')) {
+                        setResult('success', `✅ ${result}`);
+                    } else if (lower.includes('fail') || lower.includes('error') || lower.includes('invalid')) {
+                        setResult('error', `❌ ${result}`);
+                    } else {
+                        setResult('info', `📌 ${result}`);
+                    }
+                } else {
+                    setResult('info', `🔍 收到结果: ${String(result).slice(0, 60)}`);
+                }
+            };
+        } else {
+            // 如果 login.js 没有定义 processResult，我们提供一个兼容函数
+            console.warn('processResult 未定义，使用内置占位');
+            window.processResult = function(result, accessToken) {
+                console.log('processResult called with:', result, accessToken);
+                if (result && result.success) {
+                    setResult('success', '✅ 登录验证成功 (模拟)');
+                } else {
+                    setResult('error', '❌ 验证失败 (模拟)');
+                }
+            };
+        }
+
+        // 覆盖 verifyLoginSignature 的异常捕获 (但保留原函数)
+        // 但这里我们可以加强一下: 若 verifyLoginSignature 不存在，报错
+        if (typeof verifyLoginSignature !== 'function') {
+            console.error('verifyLoginSignature 未定义，请确保 login.js 加载成功');
+            setResult('error', '❌ 核心验证函数缺失，请检查 login.js');
+        }
+
+        // 页面加载: 指纹填充 (同原始逻辑)
+        window.onload = function() {
+            if (typeof fingerprintInformation === 'function') {
+                fingerprintInformation()
+                    .then(res => {
+                        if (res && res.visitorId) {
+                            visitorInput.value = res.visitorId;
+                            window.localStorage.setItem('visitorId', res.visitorId);
+                            // 更新状态
+                            setResult('info', '✅ 访客ID已加载，请输入令牌');
+                        } else {
+                            setResult('error', '⚠️ 无法获取访客ID');
+                        }
+                    })
+                    .catch(err => {
+                        console.warn('指纹获取失败:', err);
+                        setResult('error', `⚠️ 指纹获取失败: ${err.message || ''}`);
+                    });
+            } else {
+                console.warn('fingerprintInformation 未定义');
+                setResult('error', '⚠️ 指纹模块未加载');
+            }
+        };
+
+        // 附加：如果 data 内容变化，清除错误边框
+        dataTextarea.addEventListener('input', function() {
+            if (this.style.borderColor === '#e55a5a' || this.style.borderColor === 'rgb(229, 90, 90)') {
+                this.style.borderColor = '';
+            }
+        });
+
+        // 友好的键盘事件: Ctrl+Enter 触发登录
+        dataTextarea.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                loginBtn.click();
+            }
+        });
+
+        // 初始显示占位 (如果已有值)
+        if (visitorInput.value) {
+            setResult('info', '✅ 访客ID已就绪，请输入令牌');
+        }
+    })();
 </script>
+
+</body>
 </html>
